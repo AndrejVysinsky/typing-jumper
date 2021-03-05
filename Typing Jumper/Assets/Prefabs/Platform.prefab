@@ -232,7 +232,7 @@ MonoBehaviour:
   letterBoxes:
   - {fileID: 0}
   letterBox: {fileID: 2866196586870921136, guid: 0d5cd2c488de49b46aee37dd35f72c0f, type: 3}
-  letterBoxHolderSizeMultiplier: 0.3
+  letterBoxHolderSizeMultiplier: 0.27
 --- !u!1 &4841316939299089625
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
+  m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
