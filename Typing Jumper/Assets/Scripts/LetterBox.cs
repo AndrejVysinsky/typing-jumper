@@ -13,6 +13,8 @@ public class LetterBox : MonoBehaviour
     public void SetLetter(char letter)
     {
         letterText.text = letter.ToString();
+
+        //var width = letterText.preferredWidth;
     }
 
     public void SetLetterBoxColor(bool isCorrect)
