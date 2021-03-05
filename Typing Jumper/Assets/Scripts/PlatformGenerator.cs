@@ -11,11 +11,13 @@ public class PlatformGenerator : MonoBehaviour
 
     private List<Platform> _platformList;
     private int _realPlatformCount;
+    private WordGenerator _wordGenerator;
 
     private void Start()
     {
         _platformList = new List<Platform>();
         _realPlatformCount = 0;
+        _wordGenerator = new WordGenerator();
     }
 
     private void Update()
@@ -34,7 +36,7 @@ public class PlatformGenerator : MonoBehaviour
         platformObject.transform.position = position;
 
         var platform = platformObject.GetComponent<Platform>();
-        platform.Initialize("text");
+        platform.Initialize(_wordGenerator.GetNextWord());
 
         _platformList.Add(platform);
 

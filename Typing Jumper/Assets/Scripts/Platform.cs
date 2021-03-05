@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -7,7 +8,8 @@ public class Platform : MonoBehaviour
     [SerializeField] GameObject jumpPoint;
 
     [SerializeField] GameObject letterBoxHolder;
-    [SerializeField] List<GameObject> letterBoxes;
+    [SerializeField] GameObject[] letterBoxes;
+    [SerializeField] GameObject letterBox;
 
     [SerializeField] float letterBoxHolderSizeMultiplier;
 
@@ -20,22 +22,29 @@ public class Platform : MonoBehaviour
     {
         Word = word;
 
-        for (int i = 0; i < letterBoxes.Count; i++)
-        {
-            if (i < word.Length)
-            {
-                letterBoxes[i].SetActive(true);
-                letterBoxes[i].GetComponent<LetterBox>().SetLetter(word[i]);
-            }
-            else
-            {
-                letterBoxes[i].SetActive(false);
-            }
-        }
+        letterBoxes = GenerateLetterBoxes(word.Length);
 
+        for (int i = 0; i < letterBoxes.Length; i++)
+        {
+            letterBoxes[i].SetActive(true);
+            letterBoxes[i].GetComponent<LetterBox>().SetLetter(word[i]);
+        }
+    }
+
+    public GameObject[] GenerateLetterBoxes(int count)
+    {
+        var boxes = new GameObject[count];
+        // scale letterboxholder
         var scale = letterBoxHolder.transform.localScale;
-        scale.x = word.Length * letterBoxHolderSizeMultiplier;
+        scale.x = count * letterBoxHolderSizeMultiplier;
         letterBoxHolder.transform.localScale = scale;
+
+        for (int i = 0; i < count; i++)
+        {
+            // instantize letterbox at parent
+            boxes[i] = Instantiate(letterBox, letterBoxHolder.transform);
+        }
+        return boxes;
     }
 
     public void HighlightLetter(int letterIndex, bool isCorrect)
