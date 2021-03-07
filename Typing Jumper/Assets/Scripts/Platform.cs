@@ -7,11 +7,13 @@ public class Platform : MonoBehaviour
 {
     [SerializeField] GameObject jumpPoint;
 
+    [Header("Letter box")]
     [SerializeField] GameObject letterBoxHolder;
-    [SerializeField] GameObject[] letterBoxes;
-    [SerializeField] GameObject letterBox;
-
     [SerializeField] float letterBoxHolderSizeMultiplier;
+    [SerializeField] GameObject letterBoxPrefab;
+
+
+    private GameObject[] _letterBoxes;
 
     public string Word { get; private set; }
     public Vector2 JumpPoint => jumpPoint.transform.position;
@@ -22,12 +24,12 @@ public class Platform : MonoBehaviour
     {
         Word = word;
 
-        letterBoxes = GenerateLetterBoxes(word.Length);
+        _letterBoxes = GenerateLetterBoxes(word.Length);
 
-        for (int i = 0; i < letterBoxes.Length; i++)
+        for (int i = 0; i < _letterBoxes.Length; i++)
         {
-            letterBoxes[i].SetActive(true);
-            letterBoxes[i].GetComponent<LetterBox>().SetLetter(word[i]);
+            _letterBoxes[i].SetActive(true);
+            _letterBoxes[i].GetComponent<LetterBox>().SetLetter(word[i]);
         }
     }
 
@@ -40,7 +42,7 @@ public class Platform : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             // instantize letterbox at parent
-            boxes[i] = Instantiate(letterBox, letterBoxHolder.transform);
+            boxes[i] = Instantiate(letterBoxPrefab, letterBoxHolder.transform);
         }
         return boxes;
     }
@@ -57,18 +59,18 @@ public class Platform : MonoBehaviour
 
     public void HighlightLetterText(int letterIndex, bool isCorrect)
     {
-        letterBoxes[letterIndex].GetComponent<LetterBox>().SetLetterColor(isCorrect);
-        letterBoxes[letterIndex].GetComponent<LetterBox>().SetBackgroundActive(false);
+        _letterBoxes[letterIndex].GetComponent<LetterBox>().SetLetterColor(isCorrect);
+        _letterBoxes[letterIndex].GetComponent<LetterBox>().SetBackgroundActive(false);
 
-        if (letterIndex + 1 < letterBoxes.Length)
+        if (letterIndex + 1 < _letterBoxes.Length)
         {
-            letterBoxes[letterIndex + 1].GetComponent<LetterBox>().SetBackgroundActive(true);
+            _letterBoxes[letterIndex + 1].GetComponent<LetterBox>().SetBackgroundActive(true);
         }
     }
     
     public void ActivatePlatform()
     {
-        letterBoxes[0].GetComponent<LetterBox>().SetBackgroundActive(true);
+        _letterBoxes[0].GetComponent<LetterBox>().SetBackgroundActive(true);
     }
 
     public void CompletePlatform()

@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 2070969167156389627}
   - component: {fileID: 2070969167156389628}
   - component: {fileID: 2070969167156389629}
+  - component: {fileID: 8135887662781270541}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -130,6 +131,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &8135887662781270541
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070969167156389631}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2070969167200782530
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,10 +242,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpPoint: {fileID: 2070969166686350115}
   letterBoxHolder: {fileID: 4841316939299089625}
-  letterBoxes:
-  - {fileID: 0}
-  letterBox: {fileID: 2866196586870921136, guid: 0d5cd2c488de49b46aee37dd35f72c0f, type: 3}
   letterBoxHolderSizeMultiplier: 0.35
+  letterBoxPrefab: {fileID: 2866196586870921136, guid: 0d5cd2c488de49b46aee37dd35f72c0f, type: 3}
+  canvasGroup: {fileID: 8135887662781270541}
+  fadeOutTime: 0.2
 --- !u!1 &4841316939299089625
 GameObject:
   m_ObjectHideFlags: 0
