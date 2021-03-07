@@ -13,6 +13,13 @@ public class LetterBox : MonoBehaviour
     public void SetLetter(char letter)
     {
         letterText.text = letter.ToString();
+
+        var rect = gameObject.GetComponent<RectTransform>();
+
+        var size = rect.sizeDelta;
+        size.x = letterText.preferredWidth;
+
+        rect.sizeDelta = size;
     }
 
     public void SetLetterBoxColor(bool isCorrect)

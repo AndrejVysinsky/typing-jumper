@@ -34,10 +34,8 @@ public class Platform : MonoBehaviour
     public GameObject[] GenerateLetterBoxes(int count)
     {
         var boxes = new GameObject[count];
-        // scale letterboxholder
-        var scale = letterBoxHolder.transform.localScale;
-        scale.x = count * letterBoxHolderSizeMultiplier;
-        letterBoxHolder.transform.localScale = scale;
+        
+        ScaleLetterBoxHolder(count);
 
         for (int i = 0; i < count; i++)
         {
@@ -45,6 +43,16 @@ public class Platform : MonoBehaviour
             boxes[i] = Instantiate(letterBox, letterBoxHolder.transform);
         }
         return boxes;
+    }
+
+    private void ScaleLetterBoxHolder(int letterCount)
+    {
+        RectTransform rect = letterBoxHolder.gameObject.GetComponent<RectTransform>();
+
+        var sizeDelta = rect.sizeDelta;
+        sizeDelta.x = letterCount * letterBoxHolderSizeMultiplier;
+
+        rect.sizeDelta = sizeDelta;
     }
 
     public void HighlightLetter(int letterIndex, bool isCorrect)
