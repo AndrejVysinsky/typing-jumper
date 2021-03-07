@@ -8,6 +8,7 @@ public class WordGenerator
 {
     private string[] _lines;
     string PATH = "Assets/Misc/english_wordlist.txt";
+    private readonly System.Random _random = new System.Random();
 
     public WordGenerator()
     {
@@ -28,7 +29,7 @@ public class WordGenerator
 
     public string GetNextWord()
     {
-        return _lines[new System.Random().Next(_lines.Length)];
+        return _lines[_random.Next(_lines.Length)];
         //return "hypocrater";
     }
 }
