@@ -6,6 +6,7 @@ public class LetterBox : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI letterText;
     [SerializeField] Image background;
+    [SerializeField] float extraSizeOnX;
 
     [SerializeField] Color correctColor;
     [SerializeField] Color incorrectColor;
@@ -17,9 +18,10 @@ public class LetterBox : MonoBehaviour
         var rect = gameObject.GetComponent<RectTransform>();
 
         var size = rect.sizeDelta;
-        size.x = letterText.preferredWidth;
-
+        size.x = letterText.preferredWidth + extraSizeOnX;
         rect.sizeDelta = size;
+
+        size.y = rect.sizeDelta.y;
     }
 
     public void SetLetterColor(bool isCorrect)

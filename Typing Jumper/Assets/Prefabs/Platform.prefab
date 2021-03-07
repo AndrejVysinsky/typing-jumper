@@ -66,8 +66,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.22}
-  m_SizeDelta: {x: 2.99, y: 1}
+  m_AnchoredPosition: {x: 0, y: 1.368}
+  m_SizeDelta: {x: 2.99, y: 0.852}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2070969167156389627
 Canvas:
@@ -232,7 +232,7 @@ MonoBehaviour:
   letterBoxes:
   - {fileID: 0}
   letterBox: {fileID: 2866196586870921136, guid: 0d5cd2c488de49b46aee37dd35f72c0f, type: 3}
-  letterBoxHolderSizeMultiplier: 0.27
+  letterBoxHolderSizeMultiplier: 0.35
 --- !u!1 &4841316939299089625
 GameObject:
   m_ObjectHideFlags: 0
