@@ -12,6 +12,9 @@ public class Platform : MonoBehaviour
     [SerializeField] float letterBoxHolderSizeMultiplier;
     [SerializeField] GameObject letterBoxPrefab;
 
+    [Header("Text fade out")]
+    [SerializeField] CanvasGroup canvasGroup;
+    [SerializeField] float fadeOutTime;
 
     private GameObject[] _letterBoxes;
 
@@ -77,9 +80,15 @@ public class Platform : MonoBehaviour
     {
         IsCompleted = true;
 
-        for (int i = 0; i < Word.Length; i++)
+        StartCoroutine(FadeOutRoutine());
+    }
+
+    private IEnumerator FadeOutRoutine()
+    {
+        for (float time = 0; time < fadeOutTime; time += Time.deltaTime)
         {
-            letterBoxes[i].SetActive(false);
+            canvasGroup.alpha = 1 - time / fadeOutTime;
+            yield return null;
         }
     }
 }
