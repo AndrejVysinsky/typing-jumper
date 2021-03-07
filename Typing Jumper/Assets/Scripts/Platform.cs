@@ -55,9 +55,20 @@ public class Platform : MonoBehaviour
         rect.sizeDelta = sizeDelta;
     }
 
-    public void HighlightLetter(int letterIndex, bool isCorrect)
+    public void HighlightLetterText(int letterIndex, bool isCorrect)
     {
-        letterBoxes[letterIndex].GetComponent<LetterBox>().SetLetterBoxColor(isCorrect);
+        letterBoxes[letterIndex].GetComponent<LetterBox>().SetLetterColor(isCorrect);
+        letterBoxes[letterIndex].GetComponent<LetterBox>().SetBackgroundActive(false);
+
+        if (letterIndex + 1 < letterBoxes.Length)
+        {
+            letterBoxes[letterIndex + 1].GetComponent<LetterBox>().SetBackgroundActive(true);
+        }
+    }
+    
+    public void ActivatePlatform()
+    {
+        letterBoxes[0].GetComponent<LetterBox>().SetBackgroundActive(true);
     }
 
     public void CompletePlatform()

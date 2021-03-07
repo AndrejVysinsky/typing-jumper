@@ -22,8 +22,13 @@ public class LetterBox : MonoBehaviour
         rect.sizeDelta = size;
     }
 
-    public void SetLetterBoxColor(bool isCorrect)
+    public void SetLetterColor(bool isCorrect)
     {
-        background.color = isCorrect ? correctColor : incorrectColor;
+        letterText.color = isCorrect ? correctColor : incorrectColor;
+    }
+
+    public void SetBackgroundActive(bool isActive)
+    {
+        background.gameObject.SetActive(isActive);
     }
 }

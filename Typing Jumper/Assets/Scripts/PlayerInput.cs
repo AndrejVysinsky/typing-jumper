@@ -41,7 +41,7 @@ public class PlayerInput : MonoBehaviour
 
         bool isLetterCorrect = userInput[0] == _activePlatform.Word[_currentletterIndex];
 
-        _activePlatform.HighlightLetter(_currentletterIndex, isLetterCorrect);
+        _activePlatform.HighlightLetterText(_currentletterIndex, isLetterCorrect);
 
         _currentletterIndex++;
 
