@@ -12,6 +12,7 @@ public class PlayerInput : MonoBehaviour
 
     private Platform _activePlatform;
     private int _currentletterIndex;
+    private int _incorrectLetterCount;
 
     private void Start()
     {
@@ -41,6 +42,9 @@ public class PlayerInput : MonoBehaviour
 
         bool isLetterCorrect = userInput[0] == _activePlatform.Word[_currentletterIndex];
 
+        if (!isLetterCorrect)
+            _incorrectLetterCount++;
+
         _activePlatform.HighlightLetterText(_currentletterIndex, isLetterCorrect);
 
         _currentletterIndex++;
@@ -55,10 +59,11 @@ public class PlayerInput : MonoBehaviour
     {
         cameraScript.MoveCamera(_activePlatform.JumpPoint);
 
-        platformGenerator.CompletePlatform(_activePlatform);
+        platformGenerator.CompletePlatform(_activePlatform, _incorrectLetterCount);
 
         _activePlatform = platformGenerator.GetNextPlatform();
 
         _currentletterIndex = 0;
+        _incorrectLetterCount = 0;
     }
 }

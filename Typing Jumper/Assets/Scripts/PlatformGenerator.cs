@@ -8,6 +8,7 @@ public class PlatformGenerator : MonoBehaviour
     [SerializeField] float platformMinX;
     [SerializeField] float platformMaxX;
     [SerializeField] GameObject platformPrefab;
+    [SerializeField] ScoreManager scoreManager;
 
     private List<Platform> _platformList;
     private int _realPlatformCount;
@@ -68,9 +69,11 @@ public class PlatformGenerator : MonoBehaviour
         return null;
     }
 
-    public void CompletePlatform(Platform platform)
+    public void CompletePlatform(Platform platform, int incorrectLetterCount)
     {
         platform.CompletePlatform();
+
+        scoreManager.EvaluateScore(platform.Word, incorrectLetterCount);
 
         if (_platformList.IndexOf(platform) >= 3)
         {
