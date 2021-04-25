@@ -6,8 +6,28 @@ public class HealthScript : MonoBehaviour
 {
     [SerializeField] List<Image> healthPoints;
 
-    public void Initialize(int numberOfHealthPoints)
+    private void Start()
     {
+        var difficulty = GameConfig.Instance.GetDifficulty();
+
+        switch (difficulty)
+        {
+            case DifficultyEnum.Easy:
+                Initialize(7);
+                break;
+            case DifficultyEnum.Medium:
+                Initialize(5);
+                break;
+            case DifficultyEnum.Hard:
+                Initialize(3);
+                break;
+        }
+    }
+
+    private void Initialize(int numberOfHealthPoints)
+    {
+        Debug.Log(numberOfHealthPoints);
+
         for (int i = 0; i < healthPoints.Count; i++)
         {
             if (i >= numberOfHealthPoints)
