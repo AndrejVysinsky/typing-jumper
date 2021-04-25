@@ -1729,19 +1729,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 856864189}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1082082900}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &856864189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2215,7 +2203,7 @@ MonoBehaviour:
   characterScript: {fileID: 519420030}
   healthScript: {fileID: 383342178}
   pauseMenu: {fileID: 40615622}
-  gameOverMenu: {fileID: 0}
+  gameOverMenu: {fileID: 1968528682}
 --- !u!4 &1032501582
 Transform:
   m_ObjectHideFlags: 0
@@ -3257,7 +3245,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -4167,7 +4155,7 @@ MonoBehaviour:
   uploadScoreButton: {fileID: 856864188}
   scoreManager: {fileID: 556408402}
   responseMessage: {fileID: 1389870812}
-  successMessageColor: {r: 0.1097456, g: 0.4339623, b: 0, a: 1}
+  successMessageColor: {r: 0.18086009, g: 0.7169812, b: 0, a: 1}
   errorMessageColor: {r: 1, g: 0.08445278, b: 0, a: 1}
 --- !u!1 &1986816284
 GameObject:
