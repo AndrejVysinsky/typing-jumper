@@ -5,6 +5,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] PlatformGenerator platformGenerator;
     [SerializeField] CharacterScript characterScript;
     [SerializeField] HealthScript healthScript;
+    [SerializeField] GameObject pauseMenu;
 
     private int[] values;
     private bool[] keys;
@@ -14,6 +15,7 @@ public class PlayerInput : MonoBehaviour
     private int _incorrectLetterCount;
 
     private bool _isGameOver = false;
+    private bool _isPaused = false;
 
     private void Start()
     {
@@ -24,6 +26,17 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         if (_isGameOver)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (_isPaused)
+                ResumeGame();
+            else
+                PauseGame();
+        }
+
+        if (_isPaused)
             return;
 
         if (Input.anyKeyDown)
@@ -78,5 +91,17 @@ public class PlayerInput : MonoBehaviour
 
         _currentletterIndex = 0;
         _incorrectLetterCount = 0;
+    }
+
+    public void PauseGame()
+    {
+        _isPaused = true;
+        pauseMenu.SetActive(true);
+    }
+
+    public void ResumeGame()
+    {
+        _isPaused = false;
+        pauseMenu.SetActive(false);
     }
 }
