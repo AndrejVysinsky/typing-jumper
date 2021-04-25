@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     [SerializeField] PlatformGenerator platformGenerator;
-    [SerializeField] CameraScript cameraScript;
+    [SerializeField] CharacterScript characterScript;
 
     private int[] values;
     private bool[] keys;
@@ -57,7 +57,7 @@ public class PlayerInput : MonoBehaviour
 
     private void PlatformCompleted()
     {
-        cameraScript.MoveCamera(_activePlatform.JumpPoint);
+        characterScript.MoveToPosition(_activePlatform.JumpPoint);
 
         platformGenerator.CompletePlatform(_activePlatform, _incorrectLetterCount);
 

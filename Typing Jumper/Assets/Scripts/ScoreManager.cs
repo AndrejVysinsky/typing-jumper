@@ -10,17 +10,6 @@ public class ScoreManager : MonoBehaviour
     private float a_param = 1f;
     private float b_param = 1.3f;
     private const int ZERO_PREFIX_COUNT = 5;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void EvaluateScore(string word, int mistakes)
     {

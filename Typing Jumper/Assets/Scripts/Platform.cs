@@ -19,9 +19,9 @@ public class Platform : MonoBehaviour
     private GameObject[] _letterBoxes;
 
     public string Word { get; private set; }
-    public Vector2 JumpPoint => jumpPoint.transform.position;
-
     public bool IsCompleted { get; private set; }
+
+    public Vector2 JumpPoint => jumpPoint.transform.position;
 
     public void Initialize(string word)
     {
