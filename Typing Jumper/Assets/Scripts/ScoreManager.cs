@@ -36,4 +36,15 @@ public class ScoreManager : MonoBehaviour
             this.scoreText.text = balanceString;
         }
     }
+
+    public int GetScore()
+    {
+        return _score;
+    }
+
+    public bool UploadScore(string playerName)
+    {
+        //API call
+        return true; // on success, false on failure
+    }
 }

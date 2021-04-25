@@ -6,6 +6,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] CharacterScript characterScript;
     [SerializeField] HealthScript healthScript;
     [SerializeField] GameObject pauseMenu;
+    [SerializeField] GameObject gameOverMenu;
 
     private int[] values;
     private bool[] keys;
@@ -66,6 +67,7 @@ public class PlayerInput : MonoBehaviour
             if (remainingHealthPoints == 0)
             {
                 _isGameOver = true;
+                gameOverMenu.SetActive(true);
                 return;
             }
             _incorrectLetterCount++;
