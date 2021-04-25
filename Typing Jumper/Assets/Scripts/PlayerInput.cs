@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
     [SerializeField] PlatformGenerator platformGenerator;
     [SerializeField] CharacterScript characterScript;
+    [SerializeField] HealthScript healthScript;
 
     private int[] values;
     private bool[] keys;
@@ -13,6 +12,8 @@ public class PlayerInput : MonoBehaviour
     private Platform _activePlatform;
     private int _currentletterIndex;
     private int _incorrectLetterCount;
+
+    private bool _isGameOver = false;
 
     private void Start()
     {
@@ -22,6 +23,9 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
+        if (_isGameOver)
+            return;
+
         if (Input.anyKeyDown)
         {
             HandleKeyboardInput();
@@ -43,7 +47,16 @@ public class PlayerInput : MonoBehaviour
         bool isLetterCorrect = userInput[0] == _activePlatform.Word[_currentletterIndex];
 
         if (!isLetterCorrect)
+        {
+            int remainingHealthPoints = healthScript.RemoveHealthPoint();
+
+            if (remainingHealthPoints == 0)
+            {
+                _isGameOver = true;
+                return;
+            }
             _incorrectLetterCount++;
+        }
 
         _activePlatform.HighlightLetterText(_currentletterIndex, isLetterCorrect);
 
