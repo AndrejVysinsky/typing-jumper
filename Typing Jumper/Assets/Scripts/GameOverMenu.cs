@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ public class GameOverMenu : MonoBehaviour
     [SerializeField] TMP_InputField nameInput;
     [SerializeField] Button uploadScoreButton;
     [SerializeField] ScoreManager scoreManager;
+    [SerializeField] HighScoreTable highscoreTable;
+    [SerializeField] Transform leaderboard;
 
     [Header("Response")]
     [SerializeField] TMP_Text responseMessage;
@@ -51,12 +54,22 @@ public class GameOverMenu : MonoBehaviour
         if (success)
         {
             _uploaded = true;
+            highscoreTable.AddHighScoreEntry(scoreManager.GetScore(), nameInput.text);
             ShowResponseMessage(successMessageScoreUploaded, successMessageColor);
+            uploadScoreButton.enabled = false;
         }
         else
         {
             ShowResponseMessage(errorMessageScoreUploaded, errorMessageColor);
         }
+        
+        ShowLeaderBoard();
+    }
+
+    private void ShowLeaderBoard()
+    {
+        leaderboard.gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 
     private void ShowResponseMessage(string message, Color color)
