@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,23 +5,31 @@ using UnityEngine.UI;
 
 public class HighScoreTable : MonoBehaviour
 {
-    [SerializeField] Transform entryContainer;
-    [SerializeField] Transform entryTemplate;
-    private List<HighScoreEntry> highScoreEntryList;
-    private List<Transform> highScoreEntryTransformList;
-    private GameObject closeParent;
+    [SerializeField] GameObject entryContainer;
+    [SerializeField] GameObject highScoreEntryPrefab;
+    private List<HighScoreEntry> entryData;
+    private List<GameObject> entryObjects;
 
     private void Awake()
     {
-        entryTemplate.gameObject.SetActive(false);
-        if (highScoreEntryTransformList != null)
+        LoadHighScoreEntries();
+    }
+
+    private void OnEnable()
+    {
+        LoadHighScoreEntries();
+    }
+
+    private void LoadHighScoreEntries()
+    {
+        if (entryObjects == null)
+            entryObjects = new List<GameObject>();
+
+        for (int i = 0; i < entryObjects.Count; i++)
         {
-            foreach (var entry in highScoreEntryTransformList)
-            {
-                Destroy(entry.gameObject);
-            }
-            highScoreEntryTransformList.Clear();
+            Destroy(entryObjects[i]);
         }
+        entryObjects.Clear();
 
         string jsonString = PlayerPrefs.GetString("highScoreTable");
         if (jsonString == null || jsonString == "")
@@ -31,55 +38,38 @@ public class HighScoreTable : MonoBehaviour
             return;
         }
         HighScores highScores = JsonUtility.FromJson<HighScores>(jsonString);
-        highScoreEntryList = highScores.highScoreEntryList;
+        entryData = highScores.entryData;
 
-        highScoreEntryList = highScoreEntryList.OrderByDescending(e => e.score).ToList();
+        entryData = entryData.OrderByDescending(e => e.score).ToList();
 
-        highScoreEntryTransformList = new List<Transform>();
-        foreach (var entry in highScoreEntryList.Take(10))
+        int max = entryData.Count > 10 ? 10 : entryData.Count;
+        for (int i = 0; i < max; i++)
         {
-            CreateHighScoreEntryTransform(entry, entryContainer, highScoreEntryTransformList);
+            var entryObject = Instantiate(highScoreEntryPrefab, entryContainer.transform);
+            entryObjects.Add(entryObject);
+
+            InitializeHighScoreEntry(i + 1, entryObject, entryData[i]);
         }
     }
 
-    public void ShowLeaderboard(GameObject parent)
+    public void ShowLeaderboard()
     {
         gameObject.SetActive(true);
-        closeParent = parent;
-        closeParent.SetActive(false);
+        LoadHighScoreEntries();
     }
 
     public void ClearLeaderboard()
     {
         PlayerPrefs.SetString("highScoreTable", null);
         PlayerPrefs.Save();
-        if(highScoreEntryTransformList != null)
-        {
-            foreach (var entry in highScoreEntryTransformList)
-            {
-                Destroy(entry.gameObject);
-            }
-            highScoreEntryTransformList.Clear();
-        }
     }
     public void CloseLeaderboard()
     {
         gameObject.SetActive(false);
-        if (closeParent != null)
-        {
-            closeParent.SetActive(true);
-        }
     }
 
-    private void CreateHighScoreEntryTransform(HighScoreEntry highScoreEntry, Transform container, List<Transform> transformList)
-    {
-        float templateHeight = 35f;
-        Transform entryTransform = Instantiate(entryTemplate, entryContainer);
-        RectTransform rectTransform = entryTransform.GetComponent<RectTransform>();
-        rectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformList.Count);
-        entryTransform.gameObject.SetActive(true);
-
-        int rank = transformList.Count + 1;
+    private void InitializeHighScoreEntry(int rank, GameObject entryObject, HighScoreEntry highScoreEntry)
+    {     
         string rankString;
         switch (rank)
         {
@@ -90,28 +80,33 @@ public class HighScoreTable : MonoBehaviour
                 rankString = rank + "TH"; break;
         }
 
-        entryTransform.Find("background").gameObject.SetActive(rank % 2 == 1);
+        entryObject.GetComponent<Image>().enabled = rank % 2 == 1;
 
-        entryTransform.Find("posText").GetComponent<TMPro.TextMeshProUGUI>().text = rankString;
-        entryTransform.Find("scoreText").GetComponent<TMPro.TextMeshProUGUI>().text = highScoreEntry.score.ToString();
-        entryTransform.Find("nameText").GetComponent<TMPro.TextMeshProUGUI>().text = highScoreEntry.name;
+        var positionText = entryObject.transform.Find("Position Text").GetComponent<TMPro.TextMeshProUGUI>();
+        var scoreText = entryObject.transform.Find("Score Text").GetComponent<TMPro.TextMeshProUGUI>();
+        var nameText = entryObject.transform.Find("Name Text").GetComponent<TMPro.TextMeshProUGUI>();
+
+        positionText.text = rankString;
+        scoreText.text = highScoreEntry.score.ToString();
+        nameText.text = highScoreEntry.name;
 
         switch (rank) { 
-            case 1: entryTransform.Find("posText").GetComponent<TMPro.TextMeshProUGUI>().color = new Color(1f, 0.84f, 0f);
-                    entryTransform.Find("scoreText").GetComponent<TMPro.TextMeshProUGUI>().color = new Color(1f, 0.84f, 0f);
-                    entryTransform.Find("nameText").GetComponent<TMPro.TextMeshProUGUI>().color = new Color(1f, 0.84f, 0f);
-                    break;
-            case 2: entryTransform.Find("posText").GetComponent<TMPro.TextMeshProUGUI>().color = new Color(0.75f, 0.75f, 0.75f);
-                    entryTransform.Find("scoreText").GetComponent<TMPro.TextMeshProUGUI>().color = new Color(0.75f, 0.75f, 0.75f);
-                    entryTransform.Find("nameText").GetComponent<TMPro.TextMeshProUGUI>().color = new Color(0.75f, 0.75f, 0.75f);
-                    break;
-            case 3: entryTransform.Find("posText").GetComponent<TMPro.TextMeshProUGUI>().color = new Color(0.8f, 0.5f, 0.2f);
-                    entryTransform.Find("scoreText").GetComponent<TMPro.TextMeshProUGUI>().color = new Color(0.8f, 0.5f, 0.2f);
-                entryTransform.Find("nameText").GetComponent<TMPro.TextMeshProUGUI>().color = new Color(0.8f, 0.5f, 0.2f);
+            case 1:
+                positionText.color = new Color(1f, 0.84f, 0f);
+                scoreText.color = new Color(1f, 0.84f, 0f);
+                nameText.color = new Color(1f, 0.84f, 0f);
                 break;
-
+            case 2:
+                positionText.color = new Color(0.75f, 0.75f, 0.75f);
+                scoreText.color = new Color(0.75f, 0.75f, 0.75f);
+                nameText.color = new Color(0.75f, 0.75f, 0.75f);
+                break;
+            case 3:
+                positionText.color = new Color(0.8f, 0.5f, 0.2f);
+                scoreText.color = new Color(0.8f, 0.5f, 0.2f);
+                nameText.color = new Color(0.8f, 0.5f, 0.2f);
+                break;
         }
-        transformList.Add(entryTransform);
     }
 
     public void AddHighScoreEntry(int score, string name)
@@ -122,18 +117,18 @@ public class HighScoreTable : MonoBehaviour
         HighScores highScores;
         if (jsonString == null || jsonString == "")
         {
-            highScores = new HighScores { highScoreEntryList = new List<HighScoreEntry>() };
+            highScores = new HighScores { entryData = new List<HighScoreEntry>() };
         } else
         {
             highScores = JsonUtility.FromJson<HighScores>(jsonString);
         }
         
-        highScores.highScoreEntryList.Add(highScoreEntry);
+        highScores.entryData.Add(highScoreEntry);
 
         string json = JsonUtility.ToJson(highScores);
         PlayerPrefs.SetString("highScoreTable", json);
         PlayerPrefs.Save();
-        Awake();
+        LoadHighScoreEntries();
     }
 
     [System.Serializable]
@@ -145,6 +140,6 @@ public class HighScoreTable : MonoBehaviour
 
     private class HighScores
     {
-        public List<HighScoreEntry> highScoreEntryList;
+        public List<HighScoreEntry> entryData;
     }
 }

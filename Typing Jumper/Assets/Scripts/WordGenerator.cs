@@ -29,7 +29,12 @@ public class WordGenerator
 
     public string GetNextWord()
     {
-        return _lines[_random.Next(_lines.Length)];
-        //return "hypocrater";
+        string word = _lines[_random.Next(_lines.Length)];
+
+        while (word.Length > 11)
+        {
+            word = _lines[_random.Next(_lines.Length)];
+        }
+        return word;
     }
 }

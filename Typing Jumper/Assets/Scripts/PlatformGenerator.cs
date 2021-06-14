@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlatformGenerator : MonoBehaviour
 {
+    [SerializeField] float startingHeight;
     [SerializeField] float platformHeightDiff;
     [SerializeField] float platformMinX;
     [SerializeField] float platformMaxX;
@@ -31,7 +32,7 @@ public class PlatformGenerator : MonoBehaviour
 
     private void GeneratePlatform()
     {
-        var position = new Vector2(Random.Range(platformMinX, platformMaxX), platformHeightDiff * _realPlatformCount);
+        var position = new Vector2(Random.Range(platformMinX, platformMaxX), platformHeightDiff * _realPlatformCount + startingHeight);
 
         var platformObject = Instantiate(platformPrefab, transform);
         platformObject.transform.position = position;
