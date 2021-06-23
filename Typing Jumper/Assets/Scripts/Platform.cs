@@ -90,5 +90,6 @@ public class Platform : MonoBehaviour
             canvasGroup.alpha = 1 - time / fadeOutTime;
             yield return null;
         }
+        canvasGroup.alpha = 0;
     }
 }

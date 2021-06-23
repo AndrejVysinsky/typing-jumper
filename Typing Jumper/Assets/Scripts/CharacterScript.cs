@@ -13,6 +13,11 @@ public class CharacterScript : MonoBehaviour
     [SerializeField] float characterSpeed;
     [SerializeField] float defaultCharacterZ;
 
+    [Header("Character states")]
+    [SerializeField] SpriteRenderer characterRenderer;
+    [SerializeField] Sprite characterIdle;
+    [SerializeField] Sprite characterJump;
+
     private Vector3 _cameraTargetPosition;
     private Vector3 _characterTargetPositon;
 
@@ -29,6 +34,7 @@ public class CharacterScript : MonoBehaviour
         _characterTargetPositon = position;
         _characterTargetPositon.z = defaultCharacterZ;
 
+        characterRenderer.sprite = characterJump;
         _updatePosition = true;
     }
 
@@ -40,6 +46,7 @@ public class CharacterScript : MonoBehaviour
         if (_cameraTargetPosition == camera.transform.position
             && _characterTargetPositon == character.transform.position)
         {
+            characterRenderer.sprite = characterIdle;
             _updatePosition = false;
             return;
         }
