@@ -7,7 +7,7 @@ using UnityEngine;
 public class WordGenerator
 {
     private string[] _lines;
-    string PATH = "Assets/Misc/english_wordlist.txt";
+    string PATH = "Assets/Resources/english_wordlist.txt";
     private readonly System.Random _random = new System.Random();
 
     public WordGenerator()
@@ -19,12 +19,11 @@ public class WordGenerator
 
         System.TimeSpan timeTaken = timer.Elapsed;
         UnityEngine.Debug.Log("Wordlist load time taken: " + timeTaken.ToString(@"m\:ss\.fff"));
-
     }
 
     private void LoadWordFile(string path)
     {
-        _lines = System.IO.File.ReadAllLines(path);
+        _lines = Resources.Load<TextAsset>("english_wordlist").text.Split('\n');
     }
 
     public string GetNextWord()

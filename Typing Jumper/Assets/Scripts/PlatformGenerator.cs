@@ -28,6 +28,7 @@ public class PlatformGenerator : MonoBehaviour
         {
             GeneratePlatform();
         }
+        
     }
 
     private void GeneratePlatform()
@@ -39,14 +40,11 @@ public class PlatformGenerator : MonoBehaviour
 
         var platform = platformObject.GetComponent<Platform>();
         platform.Initialize(_wordGenerator.GetNextWord());
-
         if (_realPlatformCount == 0)
         {
             platform.ActivatePlatform();
         }
-
         _platformList.Add(platform);
-
         _realPlatformCount++;
     }
 
