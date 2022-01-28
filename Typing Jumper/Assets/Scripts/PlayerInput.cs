@@ -80,6 +80,12 @@ public class PlayerInput : MonoBehaviour
         if (_currentletterIndex == _activePlatform.Word.Length)
         {
             PlatformCompleted();
+
+            if (_activePlatform == null)
+            {
+                _isGameOver = true;
+                gameOverMenu.SetActive(true);
+            }
         }
     }
 

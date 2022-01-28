@@ -26,8 +26,6 @@ public class HealthScript : MonoBehaviour
 
     private void Initialize(int numberOfHealthPoints)
     {
-        Debug.Log(numberOfHealthPoints);
-
         for (int i = 0; i < healthPoints.Count; i++)
         {
             if (i >= numberOfHealthPoints)
@@ -43,6 +41,8 @@ public class HealthScript : MonoBehaviour
 
     public int RemoveHealthPoint()
     {
+        return 5;
+        
         int remainingHealthPoints = 0;
         for (int i = healthPoints.Count - 1; i >= 0; i--)
         {

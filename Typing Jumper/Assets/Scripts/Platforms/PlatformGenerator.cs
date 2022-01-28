@@ -8,6 +8,7 @@ public class PlatformGenerator : MonoBehaviour
     [SerializeField] float platformHeightDiff;
     [SerializeField] float platformMinX;
     [SerializeField] float platformMaxX;
+    [SerializeField] float platformMaxY;
     [SerializeField] GameObject platformPrefab;
     [SerializeField] ScoreManager scoreManager;
 
@@ -33,7 +34,13 @@ public class PlatformGenerator : MonoBehaviour
 
     private void GeneratePlatform()
     {
-        var position = new Vector2(Random.Range(platformMinX, platformMaxX), platformHeightDiff * _realPlatformCount + startingHeight);
+        var platformY = platformHeightDiff * _realPlatformCount + startingHeight;
+        if (platformY > platformMaxY)
+        {
+            return;
+        }
+        
+        var position = new Vector2(Random.Range(platformMinX, platformMaxX), platformY);
 
         var platformObject = Instantiate(platformPrefab, transform);
         platformObject.transform.position = position;

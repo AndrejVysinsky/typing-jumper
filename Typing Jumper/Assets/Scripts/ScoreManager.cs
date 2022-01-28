@@ -17,7 +17,7 @@ public class ScoreManager : MonoBehaviour
         double complexity = a_param * Math.Pow(b_param, word.Length);
         double reward = Math.Round(complexity - (mistakes / word.Length) * word.Length);
         this._score += (int) reward;
-        Debug.Log("Added to score:" + reward);
+        //Debug.Log("Added to score:" + reward);
         this.UpdateScore();
     }
 

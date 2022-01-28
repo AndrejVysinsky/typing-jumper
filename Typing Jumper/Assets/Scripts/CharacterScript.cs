@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterScript : MonoBehaviour
 {
@@ -6,6 +7,10 @@ public class CharacterScript : MonoBehaviour
     [SerializeField] new Camera camera;
     [SerializeField] float cameraSpeed;
     [SerializeField] float defaultCameraZ;
+
+    [Header("Height bar")]
+    [SerializeField] Slider heightSlider;
+    [SerializeField] float maxHeight;
 
     [Header("Character")]
     [SerializeField] GameObject character;
@@ -22,6 +27,12 @@ public class CharacterScript : MonoBehaviour
     private Vector3 _characterTargetPositon;
 
     private bool _updatePosition = false;
+    private float _startingCameraY = 0;
+
+    private void Start()
+    {
+        _startingCameraY = camera.transform.position.y;
+    }
 
     public void MoveToPosition(Vector2 position)
     {
@@ -36,6 +47,12 @@ public class CharacterScript : MonoBehaviour
 
         characterRenderer.sprite = characterJump;
         _updatePosition = true;
+
+        //update height bar
+        var heightRange = maxHeight - _startingCameraY;
+        var currentHeight = _cameraTargetPosition.y - _startingCameraY;
+
+        heightSlider.value = currentHeight / heightRange;
     }
 
     private void Update()
@@ -43,10 +60,14 @@ public class CharacterScript : MonoBehaviour
         if (_updatePosition == false)
             return;
 
+        if (_characterTargetPositon == character.transform.position)
+        {
+            characterRenderer.sprite = characterIdle;
+        }
+
         if (_cameraTargetPosition == camera.transform.position
             && _characterTargetPositon == character.transform.position)
         {
-            characterRenderer.sprite = characterIdle;
             _updatePosition = false;
             return;
         }

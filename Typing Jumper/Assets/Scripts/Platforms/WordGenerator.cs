@@ -18,7 +18,7 @@ public class WordGenerator
         timer.Stop();
 
         System.TimeSpan timeTaken = timer.Elapsed;
-        UnityEngine.Debug.Log("Wordlist load time taken: " + timeTaken.ToString(@"m\:ss\.fff"));
+        //UnityEngine.Debug.Log("Wordlist load time taken: " + timeTaken.ToString(@"m\:ss\.fff"));
     }
 
     private void LoadWordFile(string path)
