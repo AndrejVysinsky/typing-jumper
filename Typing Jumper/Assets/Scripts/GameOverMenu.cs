@@ -49,27 +49,18 @@ public class GameOverMenu : MonoBehaviour
             return;
         }
         
-        bool success = scoreManager.UploadScore(nameInput.text);
+        bool success = highscoreTable.AddHighScoreEntry(scoreManager.GetScore(), nameInput.text);
 
         if (success)
         {
             _uploaded = true;
-            highscoreTable.AddHighScoreEntry(scoreManager.GetScore(), nameInput.text);
             ShowResponseMessage(successMessageScoreUploaded, successMessageColor);
             uploadScoreButton.enabled = false;
         }
         else
         {
             ShowResponseMessage(errorMessageScoreUploaded, errorMessageColor);
-        }
-        
-        ShowLeaderBoard();
-    }
-
-    private void ShowLeaderBoard()
-    {
-        leaderboard.gameObject.SetActive(true);
-        gameObject.SetActive(false);
+        }       
     }
 
     private void ShowResponseMessage(string message, Color color)
