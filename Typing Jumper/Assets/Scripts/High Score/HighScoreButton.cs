@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class HighScoreButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+public class HighScoreButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Components")]
     [SerializeField] Image buttonImage;
@@ -21,20 +21,11 @@ public class HighScoreButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [SerializeField] Color highlightTextColor;
     [SerializeField] Color highlightButtonColor;
 
-    [Header("Misc")]
-    [SerializeField] HighScoreScreen highScoreScreen;
-    [SerializeField] DifficultyEnum difficulty;
-
-    public DifficultyEnum Difficulty => difficulty;
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        highScoreScreen.HighScoreButtonClicked(this);
-    }
-
+    private bool _isActive = false;
+    
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (highScoreScreen.IsHighScoreButtonClicked(this))
+        if (_isActive)
             return;
 
         HighlightButton();
@@ -42,7 +33,7 @@ public class HighScoreButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (highScoreScreen.IsHighScoreButtonClicked(this))
+        if (_isActive)
             return;
 
         DeactivateButton();
@@ -50,12 +41,14 @@ public class HighScoreButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void ActivateButton()
     {
+        _isActive = true;
         buttonImage.color = activeButtonColor;
         buttonText.color = activeTextColor;
     }
 
     public void DeactivateButton()
     {
+        _isActive = false;
         buttonImage.color = inactiveButtonColor;
         buttonText.color = inactiveTextColor;
     }

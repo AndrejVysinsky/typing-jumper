@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class HighScoreTable : MonoBehaviour
 {
@@ -10,14 +9,104 @@ public class HighScoreTable : MonoBehaviour
     private List<HighScoreEntry> entryData;
     private List<GameObject> entryObjects;
 
+    [SerializeField] GameObject casualContainer;
+    [SerializeField] GameObject competitiveContainer;
+
+    [SerializeField] HighScoreButton casualButton;
+    [SerializeField] HighScoreButton competitiveButton;
+
+    [SerializeField] HighScoreButton[] casualModeButtons;
+    [SerializeField] HighScoreButton[] competitiveModeButtons;
+
+    private int _gameModeIndex = 0;
+    private int _casualModeIndex = 0;
+    private int _competitiveModeIndex = 0;
+    
     private void Awake()
     {
+        ActivateDefaultButtons();
         LoadHighScoreEntries();
     }
 
     private void OnEnable()
     {
+        ActivateDefaultButtons();
         LoadHighScoreEntries();
+    }
+
+    private void ActivateDefaultButtons()
+    {
+        if (_gameModeIndex == (int)GameModeEnum.Casual)
+        {
+            ActivateCasual();
+        }
+        else
+        {
+            ActivateCompetitive();
+        }
+    }
+
+    public void ActivateCasual()
+    {
+        _gameModeIndex = 0;
+
+        casualButton.ActivateButton();
+        competitiveButton.DeactivateButton();
+
+        casualContainer.SetActive(true);
+        competitiveContainer.SetActive(false);
+
+        LoadCasualEntries(_casualModeIndex);
+    }
+
+    public void ActivateCompetitive()
+    {
+        _gameModeIndex = 1;
+
+        casualButton.DeactivateButton();
+        competitiveButton.ActivateButton();
+
+        casualContainer.SetActive(false);
+        competitiveContainer.SetActive(true);
+
+        LoadCompetitiveEntries(_competitiveModeIndex);
+    }
+
+    public void LoadCasualEntries(int difficultyIndex)
+    {
+        _casualModeIndex = difficultyIndex;
+
+        for (int i = 0; i < casualModeButtons.Length; i++)
+        {
+            casualModeButtons[i].DeactivateButton();
+        }
+        casualModeButtons[_casualModeIndex].ActivateButton();
+
+        //get json from api
+        string[] result = new string[3];
+
+        ShowHighScores(result);
+    }
+
+    public void LoadCompetitiveEntries(int timeLimitIndex)
+    {
+        _competitiveModeIndex = timeLimitIndex;
+
+        for (int i = 0; i < competitiveModeButtons.Length; i++)
+        {
+            competitiveModeButtons[i].DeactivateButton();
+        }
+        competitiveModeButtons[_competitiveModeIndex].ActivateButton();
+
+        //get json from api
+        string[] result = new string[3];
+
+        ShowHighScores(result);
+    }
+
+    private void ShowHighScores(string[] apiResult)
+    {
+
     }
 
     private void LoadHighScoreEntries()
@@ -80,7 +169,7 @@ public class HighScoreTable : MonoBehaviour
                 rankString = rank + "TH"; break;
         }
 
-        entryObject.GetComponent<Image>().enabled = rank % 2 == 1;
+        //entryObject.GetComponent<Image>().enabled = rank % 2 == 1;
 
         var positionText = entryObject.transform.Find("Position Text").GetComponent<TMPro.TextMeshProUGUI>();
         var scoreText = entryObject.transform.Find("Score Text").GetComponent<TMPro.TextMeshProUGUI>();
