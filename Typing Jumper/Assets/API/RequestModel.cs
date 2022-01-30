@@ -9,8 +9,15 @@ using System.Threading.Tasks;
 /// </summary>
 public class RequestModel
 {
-    public string Name { get; set; }
+    public RequestModel(string username, int score, int gameMode, string gameDifficulty)
+    {
+        Username = username;
+        Score = score;
+        GameMode = gameMode;
+        GameDifficulty = gameDifficulty;
+    }
+    public string Username { get; set; }
     public int Score { get; set; }
     public int GameMode { get; set; }
-    public int GameDifficulty { get; set; }
+    public string GameDifficulty { get; set; }
 }
