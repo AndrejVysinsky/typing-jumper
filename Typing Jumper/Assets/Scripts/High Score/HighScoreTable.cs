@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,7 +7,6 @@ public class HighScoreTable : MonoBehaviour
 {
     [SerializeField] GameObject entryContainer;
     [SerializeField] GameObject highScoreEntryPrefab;
-    private List<HighScoreEntry> entryData;
     private List<GameObject> entryObjects;
 
     [SerializeField] GameObject casualContainer;
@@ -24,17 +24,15 @@ public class HighScoreTable : MonoBehaviour
     
     private void Awake()
     {
-        ActivateDefaultButtons();
-        LoadHighScoreEntries();
+        ShowResults();
     }
 
     private void OnEnable()
     {
-        ActivateDefaultButtons();
-        LoadHighScoreEntries();
+        ShowResults();
     }
 
-    private void ActivateDefaultButtons()
+    private void ShowResults()
     {
         if (_gameModeIndex == (int)GameModeEnum.Casual)
         {
@@ -83,9 +81,36 @@ public class HighScoreTable : MonoBehaviour
         casualModeButtons[_casualModeIndex].ActivateButton();
 
         //get json from api
-        string[] result = new string[3];
+        ResultModel[] results = new ResultModel[] {
+            new ResultModel()
+            {
+                Position = 1,
+                Name = "Michal",
+                Score = 123,
+                GameMode = 0,
+                GameDifficulty = 0
+            },
+            new ResultModel()
+            {
+                Position = 2,
+                Name = "Peter",
+                Score = 345,
+                GameMode = 0,
+                GameDifficulty = 1
+            },
+            new ResultModel()
+            {
+                Position = 1,
+                Name = "Filip",
+                Score = 567,
+                GameMode = 0,
+                GameDifficulty = 2
+            }
+        };
 
-        ShowHighScores(result);
+        results = results.Where(x => x.GameDifficulty == difficultyIndex).ToArray();
+
+        ShowHighScores(results);
     }
 
     public void LoadCompetitiveEntries(int timeLimitIndex)
@@ -99,17 +124,39 @@ public class HighScoreTable : MonoBehaviour
         competitiveModeButtons[_competitiveModeIndex].ActivateButton();
 
         //get json from api
-        string[] result = new string[3];
+        ResultModel[] results = new ResultModel[] {
+            new ResultModel()
+            {
+                Position = 1,
+                Name = "Ado",
+                Score = 324,
+                GameMode = 1,
+                GameDifficulty = 0
+            },
+            new ResultModel()
+            {
+                Position = 2,
+                Name = "Ivan",
+                Score = 224,
+                GameMode = 1,
+                GameDifficulty = 1
+            },
+            new ResultModel()
+            {
+                Position = 1,
+                Name = "Zdenko",
+                Score = 424,
+                GameMode = 1,
+                GameDifficulty = 1
+            }
+        };
 
-        ShowHighScores(result);
+        results = results.Where(x => x.GameDifficulty == timeLimitIndex).ToArray();
+
+        ShowHighScores(results);
     }
 
-    private void ShowHighScores(string[] apiResult)
-    {
-
-    }
-
-    private void LoadHighScoreEntries()
+    private void ShowHighScores(ResultModel[] results)
     {
         if (entryObjects == null)
             entryObjects = new List<GameObject>();
@@ -120,44 +167,24 @@ public class HighScoreTable : MonoBehaviour
         }
         entryObjects.Clear();
 
-        string jsonString = PlayerPrefs.GetString("highScoreTable");
-        if (jsonString == null || jsonString == "")
-        {
-            // empty table
-            return;
-        }
-        HighScores highScores = JsonUtility.FromJson<HighScores>(jsonString);
-        entryData = highScores.entryData;
+        results = results.OrderByDescending(x => x.Score).ToArray();
 
-        entryData = entryData.OrderByDescending(e => e.score).ToList();
-
-        int max = entryData.Count > 10 ? 10 : entryData.Count;
+        int max = results.Length > 10 ? 10 : results.Length;
         for (int i = 0; i < max; i++)
         {
             var entryObject = Instantiate(highScoreEntryPrefab, entryContainer.transform);
             entryObjects.Add(entryObject);
 
-            InitializeHighScoreEntry(i + 1, entryObject, entryData[i]);
+            InitializeHighScoreEntry(i + 1, entryObject, results[i]);
         }
     }
 
-    public void ShowLeaderboard()
-    {
-        gameObject.SetActive(true);
-        LoadHighScoreEntries();
-    }
-
-    public void ClearLeaderboard()
-    {
-        PlayerPrefs.SetString("highScoreTable", null);
-        PlayerPrefs.Save();
-    }
     public void CloseLeaderboard()
     {
         gameObject.SetActive(false);
     }
 
-    private void InitializeHighScoreEntry(int rank, GameObject entryObject, HighScoreEntry highScoreEntry)
+    private void InitializeHighScoreEntry(int rank, GameObject entryObject, ResultModel resultModel)
     {     
         string rankString;
         switch (rank)
@@ -176,8 +203,8 @@ public class HighScoreTable : MonoBehaviour
         var nameText = entryObject.transform.Find("Name Text").GetComponent<TMPro.TextMeshProUGUI>();
 
         positionText.text = rankString;
-        scoreText.text = highScoreEntry.score.ToString();
-        nameText.text = highScoreEntry.name;
+        scoreText.text = resultModel.Score.ToString();
+        nameText.text = resultModel.Name;
 
         switch (rank) { 
             case 1:
@@ -198,37 +225,34 @@ public class HighScoreTable : MonoBehaviour
         }
     }
 
-    public void AddHighScoreEntry(int score, string name)
+    public bool AddHighScoreEntry(int score, string name)
     {
-        HighScoreEntry highScoreEntry = new HighScoreEntry { score = score, name = name };
+        var gameMode = (int)GameConfig.Instance.GetGameMode();
+        var gameDifficulty = 0;
 
-        string jsonString = PlayerPrefs.GetString("highScoreTable");
-        HighScores highScores;
-        if (jsonString == null || jsonString == "")
+        if (gameMode == (int)GameModeEnum.Casual)
         {
-            highScores = new HighScores { entryData = new List<HighScoreEntry>() };
-        } else
-        {
-            highScores = JsonUtility.FromJson<HighScores>(jsonString);
+            gameDifficulty = (int)GameConfig.Instance.GetDifficulty();
         }
-        
-        highScores.entryData.Add(highScoreEntry);
+        else if (gameMode == (int)GameModeEnum.Competitive)
+        {
+            gameDifficulty = (int)GameConfig.Instance.GetTimeLimit();
+        }
+        else
+        {
+            return false;
+        }
 
-        string json = JsonUtility.ToJson(highScores);
-        PlayerPrefs.SetString("highScoreTable", json);
-        PlayerPrefs.Save();
-        LoadHighScoreEntries();
-    }
+        RequestModel request = new RequestModel()
+        {
+            Name = name,
+            Score = score,
+            GameMode = gameMode,
+            GameDifficulty = gameDifficulty
+        };
 
-    [System.Serializable]
-    private class HighScoreEntry
-    {
-        public int score;
-        public string name;
-    }
+        //call api to send request
 
-    private class HighScores
-    {
-        public List<HighScoreEntry> entryData;
+        return true;
     }
 }

@@ -41,7 +41,7 @@ public class ScoreManager : MonoBehaviour
     {
         return _score;
     }
-
+	
     public bool UploadScore(string playerName)
     {
         //API call

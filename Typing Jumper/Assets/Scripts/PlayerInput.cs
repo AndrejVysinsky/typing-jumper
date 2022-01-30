@@ -40,6 +40,13 @@ public class PlayerInput : MonoBehaviour
         if (_isPaused)
             return;
 
+        if (healthScript.IsOutOfTime() == true)
+        {
+            _isGameOver = true;
+            gameOverMenu.SetActive(true);
+            return;
+        }
+
         if (Input.anyKeyDown)
         {
             HandleKeyboardInput();
