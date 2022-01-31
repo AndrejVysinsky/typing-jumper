@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class HighScoreTable : MonoBehaviour
@@ -21,7 +22,7 @@ public class HighScoreTable : MonoBehaviour
     private int _gameModeIndex = 0;
     private int _casualModeIndex = 0;
     private int _competitiveModeIndex = 0;
-    
+
     private void Awake()
     {
         ShowResults();
@@ -80,35 +81,11 @@ public class HighScoreTable : MonoBehaviour
         }
         casualModeButtons[_casualModeIndex].ActivateButton();
 
-        //get json from api
-        ResultModel[] results = new ResultModel[] {
-            new ResultModel()
-            {
-                Position = 1,
-                Name = "Michal",
-                Score = 123,
-                GameMode = 0,
-                GameDifficulty = 0
-            },
-            new ResultModel()
-            {
-                Position = 2,
-                Name = "Peter",
-                Score = 345,
-                GameMode = 0,
-                GameDifficulty = 1
-            },
-            new ResultModel()
-            {
-                Position = 1,
-                Name = "Filip",
-                Score = 567,
-                GameMode = 0,
-                GameDifficulty = 2
-            }
-        };
-
-        results = results.Where(x => x.GameDifficulty == difficultyIndex).ToArray();
+        var wrapper = new APIWrapper();
+        var result = Task.Run(() => wrapper.getLeaderboard(difficultyIndex, (int)GameModeEnum.Casual)).Result;
+        
+        var results = result.ToArray();
+        results = results.Where(x => x.difficulty == difficultyIndex).ToArray();
 
         ShowHighScores(results);
     }
@@ -123,35 +100,12 @@ public class HighScoreTable : MonoBehaviour
         }
         competitiveModeButtons[_competitiveModeIndex].ActivateButton();
 
-        //get json from api
-        ResultModel[] results = new ResultModel[] {
-            new ResultModel()
-            {
-                Position = 1,
-                Name = "Ado",
-                Score = 324,
-                GameMode = 1,
-                GameDifficulty = 0
-            },
-            new ResultModel()
-            {
-                Position = 2,
-                Name = "Ivan",
-                Score = 224,
-                GameMode = 1,
-                GameDifficulty = 1
-            },
-            new ResultModel()
-            {
-                Position = 1,
-                Name = "Zdenko",
-                Score = 424,
-                GameMode = 1,
-                GameDifficulty = 1
-            }
-        };
 
-        results = results.Where(x => x.GameDifficulty == timeLimitIndex).ToArray();
+        var wrapper = new APIWrapper();
+        var result = Task.Run(() => wrapper.getLeaderboard(timeLimitIndex, (int)GameModeEnum.Competitive)).Result;
+
+        var results = result.ToArray();
+        results = results.Where(x => x.difficulty == timeLimitIndex).ToArray();
 
         ShowHighScores(results);
     }
@@ -167,7 +121,7 @@ public class HighScoreTable : MonoBehaviour
         }
         entryObjects.Clear();
 
-        results = results.OrderByDescending(x => x.Score).ToArray();
+        results = results.OrderByDescending(x => x.score).ToArray();
 
         int max = results.Length > 10 ? 10 : results.Length;
         for (int i = 0; i < max; i++)
@@ -203,8 +157,8 @@ public class HighScoreTable : MonoBehaviour
         var nameText = entryObject.transform.Find("Name Text").GetComponent<TMPro.TextMeshProUGUI>();
 
         positionText.text = rankString;
-        scoreText.text = resultModel.Score.ToString();
-        nameText.text = resultModel.Name;
+        scoreText.text = resultModel.score.ToString();
+        nameText.text = resultModel.username;
 
         switch (rank) { 
             case 1:
@@ -245,14 +199,14 @@ public class HighScoreTable : MonoBehaviour
 
         RequestModel request = new RequestModel()
         {
-            Name = name,
-            Score = score,
-            GameMode = gameMode,
-            GameDifficulty = gameDifficulty
+            username = name,
+            score = score,
+            game_mode = gameMode,
+            difficulty = gameDifficulty
         };
 
-        //call api to send request
-
-        return true;
+        var wrapper = new APIWrapper();
+        var result = Task.Run(() => wrapper.submitScore(request)).Result;
+        return result;
     }
 }

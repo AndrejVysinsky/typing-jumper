@@ -45,7 +45,7 @@ public class ScoreManager : MonoBehaviour
     public bool UploadScore(string playerName)
     {
         //API call
-        System.Threading.Tasks.Task<bool> task = new APIWrapper().submitScore(new RequestModel(playerName, _score, 1, "Easy"));
+        
         return true; // on success, false on failure
     }
 }
