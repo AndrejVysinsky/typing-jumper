@@ -114,6 +114,11 @@ public class HealthScript : MonoBehaviour
 
     public int RemoveHealthPoint()
     {
+        if (_activeGameMode == GameModeEnum.Competitive)
+        {
+            return int.MaxValue;
+        }
+
         int remainingHealthPoints = 0;
         for (int i = healthPoints.Count - 1; i >= 0; i--)
         {
