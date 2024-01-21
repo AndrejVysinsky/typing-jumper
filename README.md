@@ -1,0 +1,2 @@
+<img src="https://github.com/AndrejVysinsky/typing-jumper/blob/master/Typing%20Jumper/Assets/Screenshots/1.png?raw=true" width="200"/> <img src="https://github.com/AndrejVysinsky/typing-jumper/blob/master/Typing%20Jumper/Assets/Screenshots/2.png?raw=true" width="200"/>
+<img src="https://github.com/AndrejVysinsky/typing-jumper/blob/master/Typing%20Jumper/Assets/Screenshots/3.png?raw=true" width="200"/>
